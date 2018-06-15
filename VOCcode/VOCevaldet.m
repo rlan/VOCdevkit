@@ -1,11 +1,25 @@
 function [rec,prec,ap] = VOCevaldet(VOCopts,id,cls,draw)
 
 % load test set
+%display(VOCopts.imgsetpath);
+%display(VOCopts.testset);
+display(sprintf(VOCopts.imgsetpath,VOCopts.testset));
 [gtids,t]=textread(sprintf(VOCopts.imgsetpath,VOCopts.testset),'%s %d');
+%gtids=textread(sprintf(VOCopts.imgsetpath,VOCopts.testset),'%s');
+size(gtids)
+size(t)
+%display(gtids(1))
+%display(t(1))
+fprintf('Class: %s\n', cls);
+fprintf('press any key to continue\n'); % rick
+pause % rick
+%toc=2 % rick toc > 1 shows progress, but WAY slower
+
 
 % load ground truth objects
 tic;
 npos=0;
+fprintf('Annopath: %s\n', VOCopts.annopath); % rick
 gt(length(gtids))=struct('BB',[],'diff',[],'det',[]);
 for i=1:length(gtids)
     % display progress
@@ -16,7 +30,12 @@ for i=1:length(gtids)
     end
     
     % read annotation
+    %sprintf(VOCopts.annopath,gtids{i})
     rec=PASreadrecord(sprintf(VOCopts.annopath,gtids{i}));
+    %display(rec) % rick
+    %display('After read annotation');
+    %fprintf('press any key to continue\n'); % rick
+    %pause % rick
     
     % extract objects of class
     clsinds=strmatch(cls,{rec.objects(:).class},'exact');
@@ -25,10 +44,15 @@ for i=1:length(gtids)
     gt(i).det=false(length(clsinds),1);
     npos=npos+sum(~gt(i).diff);
 end
+size(gt) % rick
 
 % load results
+sprintf('Result file: %s\n', sprintf(VOCopts.detrespath,id,cls)) % rick
 [ids,confidence,b1,b2,b3,b4]=textread(sprintf(VOCopts.detrespath,id,cls),'%s %f %f %f %f %f');
 BB=[b1 b2 b3 b4]';
+size(ids) % rick
+size(confidence) % rick
+size(BB) % rick
 
 % sort detections by decreasing confidence
 [sc,si]=sort(-confidence);
@@ -108,6 +132,7 @@ for t=0:0.1:1
     ap=ap+p/11;
 end
 
+sprintf('class: %s, subset: %s, AP = %.3f',cls,VOCopts.testset,ap)
 if draw
     % plot precision/recall
     plot(rec,prec,'-');

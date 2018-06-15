@@ -3,11 +3,23 @@ clear VOCopts
 % use VOC2006 or VOC2007 data
 
 VOC2006=false; % set true to use VOC2006 data
+VOC2007=false; % set true to use VOC2007 data
+VOC2017=false; % set true to use
+VOC2018=true; % set true to use
+VOC2019=false;
 
 % dataset
 
 if VOC2006
     VOCopts.dataset='VOC2006';
+elseif VOC2007
+    VOCopts.dataset='VOC2007';
+elseif VOC2017
+    VOCopts.dataset='VOC2017';
+elseif VOC2018
+    VOCopts.dataset='VOC2018';
+elseif VOC2019
+    VOCopts.dataset='VOC2019';
 else
     VOCopts.dataset='VOC2007';
 end
@@ -28,8 +40,8 @@ VOCopts.localdir=[cwd '/local/' VOCopts.dataset '/'];
 
 % initialize the test set
 
-VOCopts.testset='val'; % use validation data for development test set
-% VOCopts.testset='test'; % use test set for final challenge
+%VOCopts.testset='val'; % use validation data for development test set
+VOCopts.testset='test'; % use test set for final challenge
 
 % initialize main challenge paths
 
@@ -74,10 +86,43 @@ if VOC2006
         'motorbike'
         'person'
         'sheep'};
-else
-
+elseif VOC2007
     % VOC2007 classes
-    
+    VOCopts.classes={...
+        'aeroplane'
+        'bicycle'
+        'bird'
+        'boat'
+        'bottle'
+        'bus'
+        'car'
+        'cat'
+        'chair'
+        'cow'
+        'diningtable'
+        'dog'
+        'horse'
+        'motorbike'
+        'person'
+        'pottedplant'
+        'sheep'
+        'sofa'
+        'train'
+        'tvmonitor'};
+
+elseif VOC2017
+    VOCopts.classes={...
+        'weed'};
+elseif VOC2018
+    VOCopts.classes={...
+        'weed'
+        'negi'};
+elseif VOC2019
+    VOCopts.classes={...
+        'weed'
+        'negi'};
+else
+    % VOC2007 classes
     VOCopts.classes={...
         'aeroplane'
         'bicycle'

@@ -1,5 +1,5 @@
 function rec = VOCreadrecxml(path)
-
+%sprintf('VOCreadrecxml %s\n', path)
 x=VOCreadxml(path);
 x=x.annotation;
 
